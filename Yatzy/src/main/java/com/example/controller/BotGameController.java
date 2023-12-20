@@ -22,6 +22,7 @@ public class BotGameController extends GameController {
         disablePlayButton();
         clearDiceButtons();
         disableRollButton();
+        unselectDice();
         currentTurnLabel.setText(opponentTurn);
         new Thread(() -> {
             try {

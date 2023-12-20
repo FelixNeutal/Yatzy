@@ -9,32 +9,20 @@ import java.io.IOException;
 public class SoloGameController extends GameController {
     @Override
     @FXML
-    protected void onRollButtonClicked() {
-        game.onRoll(getUnSelectedDice());
-        enableDiceButtons();
-        //enableScoreButtons();
-        printDice(game.getHand());
-        printScores(game.getScores());
-        unselectDice();
-        unselectScore();
-        rollButton.setDisable(game.isRollCountDone());
-    }
-
-    @Override
-    @FXML
     protected void onPlayButtonClicked() {
         ToggleButton button = getScoreButton();
         int score = Integer.parseInt(button.getText());
         if (button.getId().equals("upperSection")) {
             game.addUpperSectionScore(score);
         }
-        game.onPlay(-1, score);
+        game.onPlay(p1ScoreButtons.indexOf(button), score);
         button.setId("checked");
         p1ScoreLabel.setText(String.valueOf(game.getPlayerScore()));
         disableScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
+        unselectDice();
         if (!game.isRoundCountDone()) {
             rollButton.setDisable(false);
             game.resetCurrentRollCount();

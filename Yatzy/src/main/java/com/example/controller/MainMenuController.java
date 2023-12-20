@@ -4,6 +4,7 @@ import com.example.game.BotGame;
 import com.example.game.Game;
 import com.example.game.SoloGame;
 import com.example.player.Player;
+import com.example.yatzy.Yatzy;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -82,7 +83,9 @@ public class MainMenuController implements Controller{
     }
 
     public FXMLLoader switchScene(String newScene, Controller c) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(newScene));
+        System.out.println("Class is: " + c.getClass().toString());
+        System.out.println("Resource is: " + getClass().getResource(newScene));
+        FXMLLoader loader = new FXMLLoader(Yatzy.class.getResource(newScene));
         if (c != null) {
             loader.setController(c);
         }

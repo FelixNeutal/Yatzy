@@ -7,7 +7,6 @@ public class BotGame extends Game{
     public BotGame() {
         super();
         opponent = new RobotPlayer();
-        System.out.println("bot game created");
     }
 
     @Override

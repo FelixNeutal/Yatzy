@@ -67,7 +67,16 @@ public abstract class GameController implements Controller {
     }
 
     @FXML
-    protected abstract void onRollButtonClicked();
+    protected void onRollButtonClicked() {
+        game.onRoll(getUnSelectedDice());
+        enableDiceButtons();
+        //enableScoreButtons();
+        printDice(game.getHand());
+        printScores(game.getScores());
+        //unselectDice();
+        unselectScore();
+        rollButton.setDisable(game.isRollCountDone());
+    }
 
     @FXML
     protected abstract void onPlayButtonClicked();
