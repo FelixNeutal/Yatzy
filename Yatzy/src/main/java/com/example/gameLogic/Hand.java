@@ -5,6 +5,7 @@ import java.util.*;
 public class Hand {
     private String hand = "";
     private String displayHand = "";
+    private int yatzyCount = 0;
 
     public Hand() {
     }
@@ -24,6 +25,14 @@ public class Hand {
     public String generateDiceNumbers(List<Integer> indexes) {
         for (Integer i : indexes) {
             generateDiceNumber(i);
+        }
+        if (yatzyCount < 3) {
+            yatzyCount++;
+            hand = "66666";
+            displayHand = "66666";
+            System.out.println("Hand is " + hand);
+            System.out.println("displayHand is " + displayHand);
+            return hand;
         }
         return displayHand;
     }
@@ -137,9 +146,11 @@ public class Hand {
         //Full House: Any set of three combined with a different pair. Score: Sum of all the dice.
         //**??? and ??***
         //***?? and ???**
-        if (matcher(new ArrayList<>(List.of("**???"))) && matcher(new ArrayList<>(List.of("??***"))) ||
-                matcher(new ArrayList<>(List.of("***??"))) && matcher(new ArrayList<>(List.of("???**"))))
-            return 25;
+        if (getYatzy() == 0) {
+            if (matcher(new ArrayList<>(List.of("**???"))) && matcher(new ArrayList<>(List.of("??***"))) ||
+                    matcher(new ArrayList<>(List.of("***??"))) && matcher(new ArrayList<>(List.of("???**"))))
+                return 25;
+        }
         return 0;
     }
 

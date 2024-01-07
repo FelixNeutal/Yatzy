@@ -1,22 +1,23 @@
 package com.example.game;
 
-public class GameMove {
-    private String dices;
-    private int score;
-    private ScoreType scoreType;
-    private int scoreIndex;
-    private int totalScore;
-    private boolean gotBonus;
-    private boolean gotYatzy;
+import java.io.Serializable;
+
+public class GameMove implements Serializable {
+    private String dices = "";
+    private int score = 0;
+    private int scoreIndex = -1;
+    private int totalScore = 0;
+    private boolean gotBonus = false;
+    private boolean gotYatzy = false;
+    private int upperScore = 0;
 
     public GameMove() {
 
     }
 
-    public GameMove(String dices, int score, ScoreType scoreType, int index) {
+    public GameMove(String dices, int score, int index) {
         this.dices = dices;
         this.score = score;
-        this.scoreType = scoreType;
         this.scoreIndex = index;
     }
 
@@ -34,14 +35,6 @@ public class GameMove {
 
     public void setScore(int score) {
         this.score = score;
-    }
-
-    public ScoreType getScoreType() {
-        return scoreType;
-    }
-
-    public void setScoreType(ScoreType scoreType) {
-        this.scoreType = scoreType;
     }
 
     public void setScoreIndex(int scoreIndex) {
@@ -74,5 +67,26 @@ public class GameMove {
 
     public void setGotYatzy(boolean gotYatzy) {
         this.gotYatzy = gotYatzy;
+    }
+
+    public int getUpperScore() {
+        return upperScore;
+    }
+
+    public void setUpperScore(int upperScore) {
+        this.upperScore = upperScore;
+    }
+
+    @Override
+    public String toString() {
+        return "GameMove{" +
+                "dices='" + dices + '\'' +
+                ", score=" + score +
+                ", scoreIndex=" + scoreIndex +
+                ", totalScore=" + totalScore +
+                ", gotBonus=" + gotBonus +
+                ", gotYatzy=" + gotYatzy +
+                ", upperScore=" + upperScore +
+                '}';
     }
 }

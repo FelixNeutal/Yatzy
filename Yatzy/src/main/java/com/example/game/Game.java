@@ -12,6 +12,7 @@ import java.util.List;
 public abstract class Game {
     //13 rounds total
     protected final int UPPERSECTIONLIMIT = 6;
+    protected final int YATZYCATEGORY = 11;
     protected int totalRoundCount = 13;
     protected int currentRoundCount = 0;
     protected int diceRollCountLimit = 3;
@@ -33,13 +34,13 @@ public abstract class Game {
         return player.getTotalScore();
     }
 
-    public int getPlayerUpperScore() {
-        return player.getUpperSectionScore();
-    }
-
-    public boolean isBonusSet() {
-        return player.getIsBonusSet();
-    }
+//    public int getPlayerUpperScore() {
+//        return player.getUpperSectionScore();
+//    }
+//
+//    public boolean isBonusSet() {
+//        return player.getIsBonusSet();
+//    }
 
     public boolean isYatzy() {
         return hand.getYatzy() == 50;
@@ -57,11 +58,7 @@ public abstract class Game {
     }
 
     //override this method
-    public void onPlay(int index) {
-        player.addToScore(currentScores.get(index), index < UPPERSECTIONLIMIT);
-        //player.addToUpperSectionScore(score);
-        currentRoundCount++;
-    }
+    public abstract GameMove onPlay(int index);
 
     //common method
     public String getHand() {

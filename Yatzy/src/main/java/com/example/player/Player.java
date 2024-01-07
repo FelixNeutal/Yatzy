@@ -3,56 +3,56 @@ package com.example.player;
 import com.example.game.GameMove;
 import com.example.gameLogic.Hand;
 
-public class Player {
-    private Hand hand;
+public class Player implements IPlayer {
     private int totalScore = 0;
     private int upperSectionScore = 0;
-    private boolean isBonusSet = false;
-    private boolean isYatzyCategory = false;
-    private boolean isYatzySet = false;
+    private boolean isBonus = false;
+    private boolean isYatzy = false;
     private String name;
 
     public Player(String name) {
         this.name = name;
     }
 
-    public void setHand(Hand hand) {
-        this.hand = hand;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Hand getHand() {
-        return hand;
-    }
-
-    public void addToScore(int score, boolean isUpperSection) {
+    public void addToScore(int score) {
         totalScore += score;
-        if (isUpperSection && upperSectionScore < 63) {
-            upperSectionScore += score;
-            if (upperSectionScore >= 63) {
-                upperSectionScore = 63;
-                totalScore += 35;
-            }
-        }
     }
 
-    public int getTotalScore() {
-        return totalScore;
+    public boolean addToBonusScore(int score) {
+        boolean bonusIsSet = false;
+        if (upperSectionScore < 63) {
+            upperSectionScore += score;
+            bonusIsSet = upperSectionScore >= 63;
+        }
+        return bonusIsSet;
+    }
+
+    public boolean isAdditionalYatzy() {
+        boolean yatzyIsSet = false;
+        if (isYatzy) {
+            totalScore += 50;
+            yatzyIsSet = true;
+        }
+        return yatzyIsSet;
     }
 
     public int getUpperSectionScore() {
         return upperSectionScore;
     }
 
-    public GameMove getPlayerMove() {
-        return new GameMove();
+    public void setIsYatzy() {
+        isYatzy = true;
     }
 
-    public boolean getIsBonusSet() {
-        isBonusSet = upperSectionScore >= 63;
-        return isBonusSet;
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public GameMove getPlayerMove() {
+        return new GameMove();
     }
 }

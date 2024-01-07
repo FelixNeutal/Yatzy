@@ -10,15 +10,18 @@ public class BotGame extends Game{
     }
 
     @Override
-    public void onPlay(int index) {
-        player.addToScore(currentScores.get(index), index < UPPERSECTIONLIMIT);
+    public GameMove onPlay(int index) {
+        player.addToScore(currentScores.get(index));
         //player.addToUpperSectionScore(score);
         currentRoundCount++;
         switchCurrentPlayer();
+        GameMove gameMove = new GameMove();
+        return  gameMove;
     }
 
     @Override
     public GameMove getOpponentMove() {
-        return opponent.getPlayerMove();
+        return this.opponent.getPlayerMove();
     }
+
 }

@@ -27,13 +27,13 @@ public class BotGameController extends GameController {
                 Platform.runLater(() -> {
                     printDice(move.getDices());
                 });
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 Platform.runLater(() -> {
                     p2ScoreButtons.get(move.getScoreIndex()).setText("" + move.getScore());
                     p2ScoreLabel.setText("" + move.getScore());
                     clearDiceButtons();
                 });
-                Thread.sleep(100);
+                Thread.sleep(1000);
                 Platform.runLater(() -> {
                     if (!game.isRoundCountDone()) {
                         currentTurnLabel.setText(playerTurn);
