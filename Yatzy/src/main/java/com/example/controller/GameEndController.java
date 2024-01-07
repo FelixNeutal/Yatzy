@@ -13,11 +13,19 @@ public class GameEndController implements Controller {
     @FXML
     private Button exitButton;
     @FXML
+    private Label soloPlayerScore;
+    @FXML
     private Label player1Score;
     @FXML
     private Label player2Score;
     @FXML
     private Label winnerLabel;
+    @FXML
+    private Label soloPlayerName;
+    @FXML
+    private Label player1Name;
+    @FXML
+    private Label player2Name;
     private MainMenuController mainController;
     private Game game;
 
@@ -39,12 +47,16 @@ public class GameEndController implements Controller {
         this.game = game;
     }
 
-    public void setSoloGameEndInfo() {
-        player1Score.setText(String.valueOf(game.getPlayerScore()));
-        winnerLabel.setText("Congrats!!!");
-    }
-
     public void setGameEndInfo() {
-
+        winnerLabel.setText(game.getWinnerText());
+        if (game.getGameType().equals("soloGame")) {
+            soloPlayerName.setText(game.getPlayerName());
+            soloPlayerScore.setText(String.valueOf(game.getPlayerScore()));
+        } else {
+            player1Name.setText(game.getPlayerName());
+            player1Score.setText(String.valueOf(game.getPlayerScore()));
+            player2Name.setText(game.getOpponentName());
+            player2Score.setText(String.valueOf(game.getOpponentScore()));
+        }
     }
 }

@@ -11,17 +11,18 @@ public class SoloGameController extends GameController {
     @FXML
     protected void onPlayButtonClicked() {
         ToggleButton button = getScoreButton();
-        int score = Integer.parseInt(button.getText());
-        if (button.getId().equals("upperSection")) {
-            game.addUpperSectionScore(score);
-        }
-        game.onPlay(p1ScoreButtons.indexOf(button), score);
-        button.setId("checked");
+        game.onPlay(p1ScoreButtons.indexOf(button));
         p1ScoreLabel.setText(String.valueOf(game.getPlayerScore()));
+        p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
+        p1BonusButton.setText(String.valueOf(game.getPlayerUpperScore()));
+        if (game.isBonusSet()) {
+            p1BonusButton.setStyle("-fx-background-color: orange;");
+        }
         disableScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
+        clearScoreButtons();
         unselectDice();
         if (!game.isRoundCountDone()) {
             rollButton.setDisable(false);

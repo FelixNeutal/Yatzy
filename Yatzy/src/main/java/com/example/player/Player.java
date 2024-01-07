@@ -8,6 +8,8 @@ public class Player {
     private int totalScore = 0;
     private int upperSectionScore = 0;
     private boolean isBonusSet = false;
+    private boolean isYatzyCategory = false;
+    private boolean isYatzySet = false;
     private String name;
 
     public Player(String name) {
@@ -26,20 +28,19 @@ public class Player {
         return hand;
     }
 
-    public void addToScore(int score) {
-        this.totalScore += score;
+    public void addToScore(int score, boolean isUpperSection) {
+        totalScore += score;
+        if (isUpperSection && upperSectionScore < 63) {
+            upperSectionScore += score;
+            if (upperSectionScore >= 63) {
+                upperSectionScore = 63;
+                totalScore += 35;
+            }
+        }
     }
 
     public int getTotalScore() {
         return totalScore;
-    }
-
-    public void addToUpperSectionScore(int score) {
-        upperSectionScore += score;
-        if (!isBonusSet && upperSectionScore >= 63) {
-            isBonusSet = true;
-            addToScore(35);
-        }
     }
 
     public int getUpperSectionScore() {
@@ -48,5 +49,10 @@ public class Player {
 
     public GameMove getPlayerMove() {
         return new GameMove();
+    }
+
+    public boolean getIsBonusSet() {
+        isBonusSet = upperSectionScore >= 63;
+        return isBonusSet;
     }
 }

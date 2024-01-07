@@ -10,17 +10,14 @@ public class BotGameController extends GameController {
     @Override
     protected void onPlayButtonClicked() {
         ToggleButton button = getScoreButton();
-        int score = Integer.parseInt(button.getText());
-        if (button.getId().equals("upperSection")) {
-            game.addUpperSectionScore(score);
-        }
-        game.onPlay(-1, score);
-        button.setId("checked");
+        game.onPlay(p1ScoreButtons.indexOf(button));
         p1ScoreLabel.setText(String.valueOf(game.getPlayerScore()));
+        p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
         disableScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
+        clearScoreButtons();
         disableRollButton();
         unselectDice();
         currentTurnLabel.setText(opponentTurn);

@@ -6,10 +6,12 @@ import com.example.gameLogic.Hand;
 import com.example.player.Player;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Game {
     //13 rounds total
+    protected final int UPPERSECTIONLIMIT = 6;
     protected int totalRoundCount = 13;
     protected int currentRoundCount = 0;
     protected int diceRollCountLimit = 3;
@@ -17,15 +19,30 @@ public abstract class Game {
     protected Hand hand;
     protected Player player;
     protected Player opponent;
+    protected List<Integer> currentScores;
+    protected String gameType = "";
 
     public Game() {
         player = new Player("Player 1");
         hand = new Hand();
+        currentScores = new ArrayList<>();
     }
 
     //common method
     public int getPlayerScore() {
         return player.getTotalScore();
+    }
+
+    public int getPlayerUpperScore() {
+        return player.getUpperSectionScore();
+    }
+
+    public boolean isBonusSet() {
+        return player.getIsBonusSet();
+    }
+
+    public boolean isYatzy() {
+        return hand.getYatzy() == 50;
     }
 
     //common method
@@ -40,15 +57,10 @@ public abstract class Game {
     }
 
     //override this method
-    public void onPlay(int index, int score) {
-        player.addToScore(score);
+    public void onPlay(int index) {
+        player.addToScore(currentScores.get(index), index < UPPERSECTIONLIMIT);
         //player.addToUpperSectionScore(score);
         currentRoundCount++;
-    }
-
-    //common method
-    public void addUpperSectionScore(int score) {
-        player.addToUpperSectionScore(score);
     }
 
     //common method
@@ -58,13 +70,15 @@ public abstract class Game {
 
     //common method
     public List<Integer> getScores() {
-        return hand.getAllScores();
+        currentScores = hand.getAllScores();
+        return currentScores;
     }
 
     //common method
     public boolean isRollCountDone() {
         return currentRollCount >= diceRollCountLimit;
     }
+
     public boolean isRoundCountDone() {
         return currentRoundCount >= totalRoundCount;
     }
@@ -75,11 +89,26 @@ public abstract class Game {
     }
 
     //common method
-    public void saveResults() {}
+    public void saveResults() {
+    }
 
     //common method
     public boolean isWon() {
         return true;
+    }
+
+    public String getWinnerText() {
+        String winText = "";
+        if (opponent != null) {
+            if (player.getTotalScore() > opponent.getTotalScore()) {
+                winText = "You Won!";
+            } else if (player.getTotalScore() < opponent.getTotalScore()) {
+                winText = "You lost!";
+            } else {
+                winText = "It's a tie!";
+            }
+        }
+        return winText;
     }
 
     //common method
@@ -92,4 +121,20 @@ public abstract class Game {
     }
 
     public abstract GameMove getOpponentMove();
+
+    public String getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(String type) {
+        gameType = type;
+    }
+
+    public String getPlayerName() {
+        return player.getName();
+    }
+
+    public String getOpponentName() {
+        return opponent.getName();
+    }
 }

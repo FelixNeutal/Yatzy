@@ -10,8 +10,8 @@ public class BotGame extends Game{
     }
 
     @Override
-    public void onPlay(int index, int score) {
-        player.addToScore(score);
+    public void onPlay(int index) {
+        player.addToScore(currentScores.get(index), index < UPPERSECTIONLIMIT);
         //player.addToUpperSectionScore(score);
         currentRoundCount++;
         switchCurrentPlayer();

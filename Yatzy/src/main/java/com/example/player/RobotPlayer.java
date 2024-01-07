@@ -1,3 +1,5 @@
+//https://www.csc.kth.se/utbildning/kth/kurser/DD143X/dkand12/Group89Michael/report/Larsson+Sjoberg.pdf
+
 package com.example.player;
 
 import com.example.game.GameMove;

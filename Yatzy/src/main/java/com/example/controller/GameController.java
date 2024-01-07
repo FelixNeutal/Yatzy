@@ -1,15 +1,23 @@
 package com.example.controller;
 
 import com.example.game.Game;
+import com.example.game.GameMove;
 import com.example.yatzy.PersistentButtonToggleGroup;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,17 +48,24 @@ public abstract class GameController implements Controller {
     protected Label p2ScoreNameLabel;
     @FXML
     protected Label currentTurnLabel;
+    @FXML
+    protected Label yatzyLabel;
 
     protected String playerTurn;
     protected String opponentTurn;
 
-    protected ToggleButton bonusButton;
+    protected ToggleButton p1BonusButton;
+    protected ToggleButton p2BonusButton;
     protected List<ToggleButton> p1ScoreButtons = new ArrayList<>();
     protected List<ToggleButton> p2ScoreButtons = new ArrayList<>();
     protected List<ToggleButton> diceButtons = new ArrayList<>();
     protected PersistentButtonToggleGroup p1Group = new PersistentButtonToggleGroup();
     public Game game;
     protected MainMenuController mainController;
+    @FXML
+    protected Button testButton;
+    @FXML
+    protected ToggleButton testToggleButton;
 
     @FXML
     public void initialize() {
@@ -76,13 +91,43 @@ public abstract class GameController implements Controller {
         //unselectDice();
         unselectScore();
         rollButton.setDisable(game.isRollCountDone());
+        if (game.isYatzy()) {
+            yatzyLabel.setText("YATZY!!!");
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                    Platform.runLater(() -> {
+                        yatzyLabel.setText("");
+                    });
+                } catch (InterruptedException ignore) {}
+            }).start();
+        }
+    }
+
+    protected void setYatzyText() {
+        yatzyLabel.setText("YATZY!!!");
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000);
+                Platform.runLater(() -> {
+                    yatzyLabel.setText("");
+                });
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).run();
     }
 
     @FXML
     protected abstract void onPlayButtonClicked();
 
     @FXML
-    protected void onScoreButtonToggled() {
+    protected void onScoreButtonToggled(ActionEvent actionEvent) {
+        playButton.setDisable(false);
+    }
+
+    @FXML
+    protected void onDiceButtonToggled() {
         playButton.setDisable(false);
     }
 
@@ -110,6 +155,12 @@ public abstract class GameController implements Controller {
 
     protected void clearDiceButtons() {
         for (ToggleButton b : diceButtons) {
+            b.setText(" ");
+        }
+    }
+
+    protected void clearScoreButtons() {
+        for (ToggleButton b : p1ScoreButtons) {
             b.setText(" ");
         }
     }
@@ -166,7 +217,19 @@ public abstract class GameController implements Controller {
         ToggleButton b;
         for (int i = 2; i < 7; i++) {
             b = new ToggleButton(" ");
+            b.setPrefSize(32.0, 32.0);
             b.setDisable(true);
+            b.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    ToggleButton tb = (ToggleButton) actionEvent.getSource();
+                    if (tb.isSelected()) {
+                        tb.setStyle("-fx-border-color: orange; -fx-border-width: 0.5em;");
+                    } else {
+                        tb.setStyle("-fx-border-color: none;");
+                    }
+                }
+            });
             diceButtons.add(b);
             diceGrid.add(b, i, 0);
         }
@@ -174,33 +237,43 @@ public abstract class GameController implements Controller {
 
     protected void createScoreButtons() {
         ToggleButton b, c;
-        for (int i = 2; i < 8; i++) {
-            b = new ToggleButton("  ");
+        for (int i = 0; i < 6; i++) {
+            b = new ToggleButton("St");
+            b.setPrefSize(32.0, 32.0);
+            //b.getStyleClass().setAll("border-color: #04AA6D;");
             b.setToggleGroup(p1Group);
             b.setDisable(true);
             b.setId("upperSection");
             b.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    onScoreButtonToggled();
+                    onScoreButtonToggled(actionEvent);
                 }
             });
             mainGrid.add(b, 1, i);
             p1ScoreButtons.add(b);
             b.setToggleGroup(p1Group);
         }
-        bonusButton = new ToggleButton("  ");
-        bonusButton.setDisable(true);
-        mainGrid.add(bonusButton, 1, 8);
-        for (int i = 2; i < 9; i++) {
+        p1BonusButton = new ToggleButton("  ");
+        p1BonusButton.setPrefSize(32.0, 32.0);
+        p1BonusButton.setDisable(true);
+        mainGrid.add(p1BonusButton, 1, 6);
+
+        p2BonusButton = new ToggleButton("  ");
+        p2BonusButton.setPrefSize(32.0, 32.0);
+        p2BonusButton.setDisable(true);
+        mainGrid.add(p2BonusButton, 2, 6);
+
+        for (int i = 0; i < 7; i++) {
             b = new ToggleButton("  ");
+            b.setPrefSize(32.0, 32.0);
             b.setToggleGroup(p1Group);
             b.setDisable(true);
             b.setId("null");
             b.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    onScoreButtonToggled();
+                    onScoreButtonToggled(actionEvent);
                 }
             });
             mainGrid.add(b, 5, i);
@@ -208,16 +281,18 @@ public abstract class GameController implements Controller {
             b.setToggleGroup(p1Group);
         }
 
-        for (int i = 2; i < 8; i++) {
-            c = new ToggleButton("XX");
+        for (int i = 0; i < 6; i++) {
+            c = new ToggleButton("  ");
+            c.setPrefSize(32.0, 32.0);
             c.setDisable(true);
             c.setId("null");
             mainGrid.add(c, 2, i);
             p2ScoreButtons.add(c);
         }
 
-        for (int i = 2; i < 9; i++) {
-            c = new ToggleButton("XX");
+        for (int i = 0; i < 7; i++) {
+            c = new ToggleButton("  ");
+            c.setPrefSize(32.0, 32.0);
             c.setDisable(true);
             c.setId("null");
             mainGrid.add(c, 6, i);
@@ -254,15 +329,14 @@ public abstract class GameController implements Controller {
     protected void unselectDice() {
         for (ToggleButton b : diceButtons) {
             b.setSelected(false);
+            b.setStyle("-fx-border-color: none;");
         }
     }
 
     protected void printScores(List<Integer> scores) {
         for (int i = 0; i < p1ScoreButtons.size(); i++) {
-            if (!p1ScoreButtons.get(i).getId().equals("checked")) {
                 p1ScoreButtons.get(i).setText(scores.get(i).toString());
                 p1ScoreButtons.get(i).setDisable(false);
-            }
         }
     }
 
@@ -277,7 +351,6 @@ public abstract class GameController implements Controller {
     }
 
     public void setGame(Game game) {
-        System.out.println("Setting game in abstract controller");
         this.game = game;
     }
 }

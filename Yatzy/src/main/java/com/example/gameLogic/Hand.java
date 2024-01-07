@@ -5,6 +5,7 @@ import java.util.*;
 public class Hand {
     private String hand = "";
     private String displayHand = "";
+
     public Hand() {
     }
 
@@ -21,10 +22,8 @@ public class Hand {
     }
 
     public String generateDiceNumbers(List<Integer> indexes) {
-        System.out.println("Generating new dice: ");
         for (Integer i : indexes) {
             generateDiceNumber(i);
-            System.out.println("Index: " + i + " and value: " + displayHand.toCharArray()[i]);
         }
         return displayHand;
     }

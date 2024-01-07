@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 
@@ -65,7 +66,7 @@ public class MainMenuController implements Controller{
         FXMLLoader loader = switchScene("GameEnd.fxml", null);
         GameEndController controller = loader.getController();
         controller.setGame(currentGame);
-        controller.setSoloGameEndInfo();
+        controller.setGameEndInfo();
         controller.setMainController(this);
         //currentGame.finalize();
 //        System.out.println("endCurrentGame foobar is: " + foobar);
@@ -83,8 +84,6 @@ public class MainMenuController implements Controller{
     }
 
     public FXMLLoader switchScene(String newScene, Controller c) throws IOException {
-        System.out.println("Class is: " + c.getClass().toString());
-        System.out.println("Resource is: " + getClass().getResource(newScene));
         FXMLLoader loader = new FXMLLoader(Yatzy.class.getResource(newScene));
         if (c != null) {
             loader.setController(c);
@@ -95,7 +94,7 @@ public class MainMenuController implements Controller{
         //controller.setMainController(this);
         //Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
-        //scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
+        scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         mainStage.setScene(scene);
         mainStage.show();
         return loader;
