@@ -1,6 +1,7 @@
 module com.example.yatzy {
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.glassfish.tyrus.server;
 
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;

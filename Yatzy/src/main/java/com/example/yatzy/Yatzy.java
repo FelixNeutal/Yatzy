@@ -1,6 +1,7 @@
 package com.example.yatzy;
 
 import com.example.controller.MainMenuController;
+import com.example.server.TyrusServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,8 +27,9 @@ public class Yatzy extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
-
+//        launch();
+        TyrusServer server = new TyrusServer();
+        server.runServer();
         //GameBrain brain = new GameBrain();
         //brain.soloGame();
     }
