@@ -1,19 +1,20 @@
 package com.example.player;
 
 import com.example.game.GameMove;
-import com.example.gameLogic.Hand;
 
+import java.net.Socket;
 import java.util.UUID;
 
-public class Player implements IPlayer {
+public class OnlinePlayer {
     private int totalScore = 0;
     private int upperSectionScore = 0;
     private boolean isBonus = false;
     private boolean isYatzy = false;
     private String name;
     private UUID uuid;
+    private Socket socket;
 
-    public Player(String name) {
+    public OnlinePlayer(String name) {
         this.name = name;
     }
 
