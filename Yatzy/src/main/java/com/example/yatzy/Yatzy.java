@@ -27,8 +27,8 @@ public class Yatzy extends Application {
     }
 
     public static void main(String[] args) {
-//        launch();
-        YatzyServer server = new YatzyServer(8000);
+        launch();
+//        YatzyServer server = new YatzyServer(8000);
         //GameBrain brain = new GameBrain();
         //brain.soloGame();
     }

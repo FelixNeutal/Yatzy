@@ -30,8 +30,6 @@ public class Hand {
             yatzyCount++;
             hand = "66666";
             displayHand = "66666";
-            System.out.println("Hand is " + hand);
-            System.out.println("displayHand is " + displayHand);
             return hand;
         }
         return displayHand;

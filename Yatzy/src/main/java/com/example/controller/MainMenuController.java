@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.game.BotGame;
 import com.example.game.Game;
+import com.example.game.PvPGame;
 import com.example.game.SoloGame;
 import com.example.player.Player;
 import com.example.yatzy.Yatzy;
@@ -48,7 +49,16 @@ public class MainMenuController implements Controller{
         controller.setGame(currentGame);
     }
     @FXML
-    protected void onPvPGameClick() {}
+    protected void onPvPGameClick() throws IOException {
+        if (mainStage == null) return;
+        FXMLLoader loader = switchScene("GameScreen.fxml", new PvPGameController());
+        PvPGameController controller = loader.getController();
+        controller.setMainController(this);
+        Player p = new Player("Felix");
+        currentGame = new PvPGame();
+        controller.setGame(currentGame);
+        controller.initializeConnection();
+    }
     @FXML
     protected void onHotSeatGameClick() {}
     @FXML
