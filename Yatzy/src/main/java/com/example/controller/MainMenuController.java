@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
@@ -50,14 +52,7 @@ public class MainMenuController implements Controller{
     }
     @FXML
     protected void onPvPGameClick() throws IOException {
-        if (mainStage == null) return;
-        FXMLLoader loader = switchScene("GameScreen.fxml", new PvPGameController());
-        PvPGameController controller = loader.getController();
-        controller.setMainController(this);
-        Player p = new Player("Felix");
-        currentGame = new PvPGame();
-        controller.setGame(currentGame);
-        controller.initializeConnection();
+        networkMenu();
     }
     @FXML
     protected void onHotSeatGameClick() {}
@@ -70,6 +65,24 @@ public class MainMenuController implements Controller{
         Player p = new Player("Felix");
         currentGame = new BotGame();
         controller.setGame(currentGame);
+    }
+
+    private void startPvPGame() throws IOException {
+        if (mainStage == null) return;
+        FXMLLoader loader = switchScene("GameScreen.fxml", new PvPGameController());
+        PvPGameController controller = loader.getController();
+        controller.setMainController(this);
+        Player p = new Player("Felix");
+        currentGame = new PvPGame();
+        controller.setGame(currentGame);
+        controller.initializeConnection();
+    }
+
+    @FXML
+    public void networkMenu() throws IOException {
+        FXMLLoader loader = switchScene("NetworkMenu.fxml", new NetworkMenuController());
+        NetworkMenuController controller = loader.getController();
+        controller.setMainController(this);
     }
 
     public void endCurrentGame() throws IOException {
@@ -113,5 +126,12 @@ public class MainMenuController implements Controller{
     @Override
     public void setMainController(MainMenuController controller) {
 
+    }
+
+    Stage getMainStage() {
+        if (mainStage == null) {
+            throw new RuntimeException("mainStage is null!");
+        }
+        return mainStage;
     }
 }

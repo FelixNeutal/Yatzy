@@ -1,7 +1,6 @@
 package com.example.yatzy;
 
 import com.example.controller.MainMenuController;
-import com.example.server.YatzyServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,6 +16,7 @@ public class Yatzy extends Application {
         //Call setController before load
         //remove fx.controller from fxml file otherwise new controller is created
         fxmlLoader.setController(new MainMenuController());
+        stage.setResizable(false);
         Scene scene = new Scene(fxmlLoader.load(), 400, 600);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setTitle("Yatzy");

@@ -1,22 +1,20 @@
 package com.example.network;
 
-import com.example.controller.GameController;
+import com.example.controller.NetworkMenuController;
 import com.example.controller.PvPGameController;
 import com.example.game.GameMove;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class NetworkHandler implements EventHandler {
-    PvPGameController controller;
+    PvPGameController gameController;
+    NetworkMenuController networkMenuController;
 
-    public NetworkHandler(PvPGameController controller) {
-        this.controller = controller;
+    public NetworkHandler() {
     }
     @Override
     public void handle(Event event) {
@@ -26,11 +24,23 @@ public class NetworkHandler implements EventHandler {
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
             // Gamemove or any other serialisable object used with ObjectInputStream
             // must have the same package structure both in server and client
-            GameMove move = (GameMove) input.readObject();
-            System.out.println("Opponent moving: " + move);
-            controller.OpponentMove(move);
+            Packet packet = (Packet) input.readObject();
+            if (packet.getHeader() == Header.OPPONENT_MOVE) {
+                GameMove move = (GameMove) packet.getPayload();
+                gameController.OpponentMove(move);
+            } else if (packet.getHeader() == Header.NEW_CONNECTION) {
+                networkMenuController.startGame();
+            }
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setGameController(PvPGameController controller) {
+        this.gameController = controller;
+    }
+
+    public void setNetworkMenuController(NetworkMenuController controller) {
+        this.networkMenuController = controller;
     }
 }

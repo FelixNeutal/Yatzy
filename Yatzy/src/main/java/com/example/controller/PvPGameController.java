@@ -10,8 +10,7 @@ import java.io.IOException;
 
 public class PvPGameController extends GameController {
     public void initializeConnection() {
-        ConnectionListener listener = new ConnectionListener(new NetworkHandler(this));
-        listener.listen();
+
     }
     @Override
     protected void onPlayButtonClicked() {

@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 public class ConnectionListener extends Thread {
     EventHandler handler;
 
-    public ConnectionListener(EventHandler handler) {
+    public ConnectionListener(EventHandler handler, int port) {
         this.handler = handler;
     }
 
