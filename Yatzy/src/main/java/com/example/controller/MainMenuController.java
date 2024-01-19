@@ -4,6 +4,7 @@ import com.example.game.BotGame;
 import com.example.game.Game;
 import com.example.game.PvPGame;
 import com.example.game.SoloGame;
+import com.example.network.Session;
 import com.example.player.Player;
 import com.example.yatzy.Yatzy;
 import javafx.fxml.FXML;
@@ -67,10 +68,11 @@ public class MainMenuController implements Controller{
         controller.setGame(currentGame);
     }
 
-    private void startPvPGame() throws IOException {
+    protected void startPvPGame(Session session) throws IOException {
         if (mainStage == null) return;
         FXMLLoader loader = switchScene("GameScreen.fxml", new PvPGameController());
         PvPGameController controller = loader.getController();
+        session.getNetworkHandler().setGameController(controller);
         controller.setMainController(this);
         Player p = new Player("Felix");
         currentGame = new PvPGame();

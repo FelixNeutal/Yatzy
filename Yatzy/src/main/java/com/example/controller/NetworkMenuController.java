@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.network.NetworkHandler;
 import com.example.network.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,6 +25,7 @@ public class NetworkMenuController implements Controller {
     @FXML
     Button mainMenuButton;
     private MainMenuController mainMenuController;
+    Session session;
 
     @Override
     public void setMainController(MainMenuController controller) {
@@ -33,7 +35,8 @@ public class NetworkMenuController implements Controller {
     @FXML
     public void onHostGameClick() {
         hostGameLabel.setText("Hosting a game");
-        Session session = new Session();
+        NetworkHandler networkHandler = new NetworkHandler();
+        session = new Session();
         session.createServer("2020");
     }
 
@@ -47,7 +50,8 @@ public class NetworkMenuController implements Controller {
         mainMenuController.backToMainMenu();
     }
 
-    public void startGame() {
-
+    public void startGame() throws IOException {
+        mainMenuController.backToMainMenu();
+        mainMenuController.startPvPGame(session);
     }
 }

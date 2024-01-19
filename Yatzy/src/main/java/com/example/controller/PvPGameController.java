@@ -18,6 +18,17 @@ public class PvPGameController extends GameController {
         game.onPlay(p1ScoreButtons.indexOf(button));
         p1ScoreLabel.setText(String.valueOf(game.getPlayerScore()));
         p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
+        setOpponentssTurn();
+    }
+
+    protected void setPlayersTurn() {
+        currentTurnLabel.setText(playerTurn);
+        enableRollButton();
+        game.resetCurrentRollCount();
+    }
+
+    protected void setOpponentssTurn() {
+        currentTurnLabel.setText(opponentTurn);
         disableScoreButtons();
         disableDiceButtons();
         disablePlayButton();
@@ -25,7 +36,6 @@ public class PvPGameController extends GameController {
         clearScoreButtons();
         disableRollButton();
         unselectDice();
-        currentTurnLabel.setText(opponentTurn);
     }
 
     public void OpponentMove(GameMove move) {
@@ -43,9 +53,7 @@ public class PvPGameController extends GameController {
                 Thread.sleep(1000);
                 Platform.runLater(() -> {
                     if (!game.isRoundCountDone()) {
-                        currentTurnLabel.setText(playerTurn);
-                        enableRollButton();
-                        game.resetCurrentRollCount();
+                        setPlayersTurn();
                     } else {
                         //Show total winner
                         try {

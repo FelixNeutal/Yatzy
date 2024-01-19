@@ -6,11 +6,21 @@ public class Session {
     private ConnectionListener listener;
     private NetworkHandler networkHandler;
 
+    public Session() {
+
+    }
     public void createServer(String port) {
         this.port = Integer.parseInt(port);
-        String response = "Waiting for player...";
         networkHandler = new NetworkHandler();
         listener = new ConnectionListener(networkHandler, this.port);
         listener.listen();
+    }
+
+    public void addNetworkhandler(NetworkHandler networkHandler) {
+        this.networkHandler = networkHandler;
+    }
+
+    public NetworkHandler getNetworkHandler() {
+        return networkHandler;
     }
 }
