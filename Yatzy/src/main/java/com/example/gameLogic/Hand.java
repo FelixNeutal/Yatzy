@@ -26,12 +26,6 @@ public class Hand {
         for (Integer i : indexes) {
             generateDiceNumber(i);
         }
-        if (yatzyCount < 3) {
-            yatzyCount++;
-            hand = "66666";
-            displayHand = "66666";
-            return hand;
-        }
         return displayHand;
     }
 

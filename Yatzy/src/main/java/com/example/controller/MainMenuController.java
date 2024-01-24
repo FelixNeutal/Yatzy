@@ -72,6 +72,7 @@ public class MainMenuController implements Controller{
         if (mainStage == null) return;
         FXMLLoader loader = switchScene("GameScreen.fxml", new PvPGameController());
         PvPGameController controller = loader.getController();
+        controller.setSession(session);
         session.getNetworkHandler().setGameController(controller);
         controller.setMainController(this);
         Player p = new Player("Felix");

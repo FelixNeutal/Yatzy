@@ -8,9 +8,11 @@ import java.net.ServerSocket;
 
 public class ConnectionListener extends Thread {
     EventHandler handler;
+    private int localPort;
 
     public ConnectionListener(EventHandler handler, int port) {
         this.handler = handler;
+        this.localPort = port;
     }
 
     public void listen() {
@@ -19,9 +21,8 @@ public class ConnectionListener extends Thread {
 
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(2025)) {
+        try (ServerSocket serverSocket = new ServerSocket(localPort)) {
             while (true) {
-                System.out.println("Waiting for client...");
                 ConnectionHandler connectionHandler = new ConnectionHandler(this, serverSocket.accept());
                 connectionHandler.start();
             }

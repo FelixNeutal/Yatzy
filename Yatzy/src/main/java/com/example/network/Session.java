@@ -35,7 +35,6 @@ public class Session {
 
     public void send(Packet packet) {
         String response;
-        System.out.println("Sending packet");
         try (Socket socket = new Socket(remoteAddress, remotePort)) {
             //Packet packet = new Packet(Header.OPPONENT_MOVE, gameMove);
             ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());

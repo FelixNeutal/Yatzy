@@ -10,6 +10,9 @@ public class PvPGame extends Game {
     @Override
     public GameMove onPlay(int index) {
         GameMove gameMove = new GameMove();
+        gameMove.setScoreIndex(index);
+        gameMove.setDices(getHand());
+        gameMove.setScore(currentScores.get(index));
         player.addToScore(currentScores.get(index));
         //player.addToUpperSectionScore(score);
         if (index < UPPERSECTIONLIMIT) {
@@ -18,15 +21,14 @@ public class PvPGame extends Game {
         }
         if (isYatzy()) { //Make it better
             if (index != YATZYCATEGORY) {
-                System.out.println("Got new yatzy");
                 gameMove.setGotYatzy(player.isAdditionalYatzy());
             } else {
-                System.out.println("Got first yatzy");
                 player.setIsYatzy();
             }
         }
         gameMove.setTotalScore(player.getTotalScore());
         currentRoundCount++;
+        System.out.println(gameMove);
         return  gameMove;
     }
 

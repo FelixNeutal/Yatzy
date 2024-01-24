@@ -1,29 +1,40 @@
 package com.example.controller;
 
 import com.example.game.GameMove;
-import com.example.network.ConnectionListener;
-import com.example.network.NetworkHandler;
+import com.example.network.*;
 import javafx.application.Platform;
 import javafx.scene.control.ToggleButton;
 
 import java.io.IOException;
 
 public class PvPGameController extends GameController {
-    public void initializeConnection() {
-
-    }
+    private Session session;
+    private int playerTurns = 0;
+    private int opponentTurns = 0;
+    private int totalTurns = 13;
     @Override
     protected void onPlayButtonClicked() {
+        playerTurns++;
         ToggleButton button = getScoreButton();
-        game.onPlay(p1ScoreButtons.indexOf(button));
-        p1ScoreLabel.setText(String.valueOf(game.getPlayerScore()));
+        GameMove gameMove = game.onPlay(p1ScoreButtons.indexOf(button));
+        p1ScoreLabel.setText(String.valueOf(gameMove.getTotalScore()));
+        System.out.println("Totalscore is " + gameMove.getTotalScore());
+        p1BonusButton.setText(String.valueOf(gameMove.getUpperScore()));
+        if (gameMove.isGotBonus()) {
+            p1BonusButton.setStyle("-fx-background-color: orange;");
+        }
+        if (gameMove.isGotYatzy()) {
+            p1ScoreButtons.get(p1ScoreButtons.indexOf(button)).setStyle("-fx-background-color: orange;");
+        }
         p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
+        session.send(new Packet(Header.OPPONENT_MOVE, gameMove));
         setOpponentssTurn();
     }
 
     protected void setPlayersTurn() {
         currentTurnLabel.setText(playerTurn);
         enableRollButton();
+        clearDiceButtons();
         game.resetCurrentRollCount();
     }
 
@@ -39,6 +50,7 @@ public class PvPGameController extends GameController {
     }
 
     public void OpponentMove(GameMove move) {
+        opponentTurns++;
         new Thread(() -> {
             try {
                 Platform.runLater(() -> {
@@ -47,7 +59,7 @@ public class PvPGameController extends GameController {
                 Thread.sleep(500);
                 Platform.runLater(() -> {
                     p2ScoreButtons.get(move.getScoreIndex()).setText("" + move.getScore());
-                    p2ScoreLabel.setText("" + move.getScore());
+                    p2ScoreLabel.setText("" + move.getTotalScore());
                     clearDiceButtons();
                 });
                 Thread.sleep(1000);
@@ -66,9 +78,21 @@ public class PvPGameController extends GameController {
         }).start();
     }
 
+    private void shouldEndGame() {
+        if (playerTurns == totalTurns && opponentTurns == totalTurns) {
+            try {
+                mainController.endCurrentGame();
+            } catch (IOException e) {}
+        }
+    }
+
     @Override
     public void setMainController(MainMenuController controller) {
         mainController = controller;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
     }
 //    public BotGameController() {
 //        System.out.println("Bot controller created");

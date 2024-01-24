@@ -4,6 +4,6 @@ public enum Header {
     SUCCESS,
     FAILURE,
     NEW_CONNECTION,
-    CONNECTED,
+    CONNECTION_ACCEPTED,
     OPPONENT_MOVE
 }
