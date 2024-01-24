@@ -68,7 +68,7 @@ public class MainMenuController implements Controller{
         controller.setGame(currentGame);
     }
 
-    protected void startPvPGame(Session session) throws IOException {
+    protected void startPvPGame(Session session, boolean playerStarts) throws IOException {
         if (mainStage == null) return;
         FXMLLoader loader = switchScene("GameScreen.fxml", new PvPGameController());
         PvPGameController controller = loader.getController();
@@ -77,7 +77,11 @@ public class MainMenuController implements Controller{
         Player p = new Player("Felix");
         currentGame = new PvPGame();
         controller.setGame(currentGame);
-        controller.initializeConnection();
+        if (playerStarts) {
+            controller.setPlayersTurn();
+        } else {
+            controller.setOpponentssTurn();
+        }
     }
 
     @FXML

@@ -29,6 +29,10 @@ public class NetworkHandler implements EventHandler {
                 GameMove move = (GameMove) packet.getPayload();
                 gameController.OpponentMove(move);
             } else if (packet.getHeader() == Header.NEW_CONNECTION) {
+                networkMenuController.getSession().setRemoteAddress(socket.getRemoteSocketAddress().toString());
+                networkMenuController.getSession().setRemotePort(socket.getPort());
+                networkMenuController.startGame();
+            } else if (packet.getHeader() == Header.CONNECTED) {
                 networkMenuController.startGame();
             }
         } catch (IOException | ClassNotFoundException e) {

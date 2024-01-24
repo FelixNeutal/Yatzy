@@ -26,6 +26,7 @@ public class NetworkMenuController implements Controller {
     Button mainMenuButton;
     private MainMenuController mainMenuController;
     Session session;
+    private boolean playerStarts;
 
     @Override
     public void setMainController(MainMenuController controller) {
@@ -34,15 +35,21 @@ public class NetworkMenuController implements Controller {
 
     @FXML
     public void onHostGameClick() {
+        playerStarts = true;
         hostGameLabel.setText("Hosting a game");
-        NetworkHandler networkHandler = new NetworkHandler();
         session = new Session();
         session.createServer("2020");
     }
 
     @FXML
     public void onJoinGameClick() {
+        playerStarts = false;
         joinGameLabel.setText("Joining a game");
+        String[] remoteNet = joinGameInput.getText().split(":");
+        String[] localNet = hostGameInput.getText().split(":");
+        session = new Session();
+        session.createServer(localNet[0], localNet[1]);
+        session.handShake();
     }
 
     @FXML
@@ -52,6 +59,10 @@ public class NetworkMenuController implements Controller {
 
     public void startGame() throws IOException {
         mainMenuController.backToMainMenu();
-        mainMenuController.startPvPGame(session);
+        mainMenuController.startPvPGame(session, playerStarts);
+    }
+
+    public Session getSession() {
+        return session;
     }
 }
