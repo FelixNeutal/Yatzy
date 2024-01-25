@@ -28,6 +28,7 @@ public class PvPGameController extends GameController {
         }
         p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
         session.send(new Packet(Header.OPPONENT_MOVE, gameMove));
+        shouldEndGame();
         setOpponentssTurn();
     }
 
@@ -51,18 +52,19 @@ public class PvPGameController extends GameController {
 
     public void OpponentMove(GameMove move) {
         opponentTurns++;
+        game.setOpponentTotalScore(move.getTotalScore());
         new Thread(() -> {
             try {
                 Platform.runLater(() -> {
                     printDice(move.getDices());
                 });
-                Thread.sleep(500);
+                Thread.sleep(800);
                 Platform.runLater(() -> {
                     p2ScoreButtons.get(move.getScoreIndex()).setText("" + move.getScore());
                     p2ScoreLabel.setText("" + move.getTotalScore());
                     clearDiceButtons();
                 });
-                Thread.sleep(1000);
+                Thread.sleep(700);
                 Platform.runLater(() -> {
                     if (!game.isRoundCountDone()) {
                         setPlayersTurn();
@@ -76,6 +78,7 @@ public class PvPGameController extends GameController {
                 });
             } catch (InterruptedException ignore) {}
         }).start();
+        shouldEndGame();
     }
 
     private void shouldEndGame() {

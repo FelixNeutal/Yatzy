@@ -22,6 +22,7 @@ public abstract class Game {
     protected Player opponent;
     protected List<Integer> currentScores;
     protected String gameType = "";
+    protected int opponentTotalScore;
 
     public Game() {
         player = new Player("Player 1");
@@ -133,5 +134,13 @@ public abstract class Game {
 
     public String getOpponentName() {
         return opponent.getName();
+    }
+
+    public int getOpponentTotalScore() {
+        return opponentTotalScore;
+    }
+
+    public void setOpponentTotalScore(int opponentTotalScore) {
+        this.opponentTotalScore = opponentTotalScore;
     }
 }

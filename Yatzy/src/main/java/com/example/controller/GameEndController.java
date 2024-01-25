@@ -53,10 +53,19 @@ public class GameEndController implements Controller {
             soloPlayerName.setText(game.getPlayerName());
             soloPlayerScore.setText(String.valueOf(game.getPlayerScore()));
         } else {
-            player1Name.setText(game.getPlayerName());
+//            player1Name.setText(game.getPlayerName());
+            player1Name.setText("You");
             player1Score.setText(String.valueOf(game.getPlayerScore()));
-            player2Name.setText(game.getOpponentName());
-            player2Score.setText(String.valueOf(game.getOpponentScore()));
+//            player2Name.setText(game.getOpponentName());
+            player2Name.setText("Opponent");
+            player2Score.setText(String.valueOf(game.getOpponentTotalScore()));
+            if (game.getPlayerScore() > game.getOpponentTotalScore()) {
+                winnerLabel.setText("YOU WON!");
+            } else if (game.getPlayerScore() < game.getOpponentTotalScore()) {
+                winnerLabel.setText("YOU LOST!");
+            } else {
+                winnerLabel.setText("It's a tie");
+            }
         }
     }
 }
