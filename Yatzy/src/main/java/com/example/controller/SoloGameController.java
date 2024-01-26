@@ -14,7 +14,6 @@ public class SoloGameController extends GameController {
         ToggleButton button = getScoreButton();
         GameMove gameMove = game.onPlay(p1ScoreButtons.indexOf(button));
         p1ScoreLabel.setText(String.valueOf(gameMove.getTotalScore()));
-        System.out.println("Totalscore is " + gameMove.getTotalScore());
         p1BonusButton.setText(String.valueOf(gameMove.getUpperScore()));
         if (gameMove.isGotBonus()) {
             p1BonusButton.setStyle("-fx-background-color: orange;");

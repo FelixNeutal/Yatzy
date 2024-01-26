@@ -30,12 +30,16 @@ public class Hand {
     }
 
     public void generateDiceNumber(int location) {
+        int digit;
         if (location < displayHand.length()) {
+            digit = (int) ((Math.random() * (7 - 1)) + 1);
+            //System.out.print(" | Changing d: " + displayHand.charAt(location) + " h: " + hand.charAt(location) + " with " + digit);
             StringBuilder b = new StringBuilder(displayHand);
-            b.setCharAt(location, Character.forDigit((int) ((Math.random() * (7 - 1)) + 1), 10));
+            b.setCharAt(location, Character.forDigit(digit, 10));
             displayHand = b.toString();
         } else {
-            displayHand += (int) ((Math.random() * (7 - 1)) + 1);
+            digit = (int) ((Math.random() * (7 - 1)) + 1);
+            displayHand += digit;
         }
         hand = displayHand;
     }

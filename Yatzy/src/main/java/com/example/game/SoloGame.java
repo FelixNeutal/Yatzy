@@ -14,14 +14,12 @@ public class SoloGame extends Game {
         //player.addToUpperSectionScore(score);
         if (index < UPPERSECTIONLIMIT) {
             gameMove.setGotBonus(player.addToBonusScore(currentScores.get(index)));
-            gameMove.setUpperScore(player.getUpperSectionScore());
         }
+        gameMove.setUpperScore(player.getUpperSectionScore());
         if (isYatzy()) { //Make it better
             if (index != YATZYCATEGORY) {
-                System.out.println("Got new yatzy");
                 gameMove.setGotYatzy(player.isAdditionalYatzy());
             } else {
-                System.out.println("Got first yatzy");
                 player.setIsYatzy();
             }
         }
