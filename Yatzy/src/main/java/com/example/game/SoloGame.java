@@ -10,20 +10,20 @@ public class SoloGame extends Game {
 
     public GameMove onPlay(int index) {
         GameMove gameMove = new GameMove();
-        player.addToScore(currentScores.get(index));
+        player1.addToScore(currentScores.get(index));
         //player.addToUpperSectionScore(score);
         if (index < UPPERSECTIONLIMIT) {
-            gameMove.setGotBonus(player.addToBonusScore(currentScores.get(index)));
+            gameMove.setGotBonus(player1.addToBonusScore(currentScores.get(index)));
         }
-        gameMove.setUpperScore(player.getUpperSectionScore());
+        gameMove.setUpperScore(player1.getUpperSectionScore());
         if (isYatzy()) { //Make it better
             if (index != YATZYCATEGORY) {
-                gameMove.setGotYatzy(player.isAdditionalYatzy());
+                gameMove.setGotYatzy(player1.isAdditionalYatzy());
             } else {
-                player.setIsYatzy();
+                player1.setIsYatzy();
             }
         }
-        gameMove.setTotalScore(player.getTotalScore());
+        gameMove.setTotalScore(player1.getTotalScore());
         currentRoundCount++;
         return  gameMove;
     }

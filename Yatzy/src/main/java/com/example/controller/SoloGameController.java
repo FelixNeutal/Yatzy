@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.controller.GameController;
 import com.example.game.GameMove;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,22 +10,22 @@ public class SoloGameController extends GameController {
     @Override
     @FXML
     protected void onPlayButtonClicked() {
-        ToggleButton button = getScoreButton();
-        GameMove gameMove = game.onPlay(p1ScoreButtons.indexOf(button));
+        int buttonIndex = getScoreButtonIndex();
+        GameMove gameMove = game.onPlay(buttonIndex);
         p1ScoreLabel.setText(String.valueOf(gameMove.getTotalScore()));
         p1BonusButton.setText(String.valueOf(gameMove.getUpperScore()));
         if (gameMove.isGotBonus()) {
             p1BonusButton.setStyle("-fx-background-color: orange;");
         }
         if (gameMove.isGotYatzy()) {
-            p1ScoreButtons.get(p1ScoreButtons.indexOf(button)).setStyle("-fx-background-color: orange;");
+            p1ScoreButtons.get(buttonIndex).setStyle("-fx-background-color: orange;");
         }
-        p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
-        disableScoreButtons();
+        p1ScoreButtons.set(buttonIndex, new ToggleButton());
+        disablePlayer1ScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
-        clearScoreButtons();
+        clearPlayer1ScoreButtons();
         unselectDice();
         if (!game.isRoundCountDone()) {
             rollButton.setDisable(false);
@@ -37,5 +36,15 @@ public class SoloGameController extends GameController {
                 mainController.endCurrentGame();
             } catch (IOException e) {}
         }
+    }
+
+    @Override
+    protected void setPlayer1Turn() {
+
+    }
+
+    @Override
+    protected void setPlayer2Turn() {
+
     }
 }

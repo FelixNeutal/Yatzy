@@ -9,18 +9,18 @@ import java.io.IOException;
 public class BotGameController extends GameController {
     @Override
     protected void onPlayButtonClicked() {
-        ToggleButton button = getScoreButton();
-        game.onPlay(p1ScoreButtons.indexOf(button));
+        int buttonIndex = getScoreButtonIndex();
+        game.onPlay(buttonIndex);
         p1ScoreLabel.setText(String.valueOf(game.getPlayerScore()));
-        p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
-        disableScoreButtons();
+        p1ScoreButtons.set(buttonIndex, new ToggleButton());
+        disablePlayer1ScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
-        clearScoreButtons();
+        clearPlayer1ScoreButtons();
         disableRollButton();
         unselectDice();
-        currentTurnLabel.setText(opponentTurn);
+        currentTurnLabel.setText(player2Turn);
         new Thread(() -> {
             try {
                 GameMove move = game.getOpponentMove();
@@ -36,7 +36,7 @@ public class BotGameController extends GameController {
                 Thread.sleep(1000);
                 Platform.runLater(() -> {
                     if (!game.isRoundCountDone()) {
-                        currentTurnLabel.setText(playerTurn);
+                        currentTurnLabel.setText(player1Turn);
                         enableRollButton();
                         game.resetCurrentRollCount();
                     } else {
@@ -49,6 +49,16 @@ public class BotGameController extends GameController {
                 });
             } catch (InterruptedException ignore) {}
         }).start();
+    }
+
+    @Override
+    protected void setPlayer1Turn() {
+
+    }
+
+    @Override
+    protected void setPlayer2Turn() {
+
     }
 
     @Override

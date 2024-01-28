@@ -1,8 +1,13 @@
 package com.example.game;
 
-public class PvPGame extends Game {
-    public PvPGame() {
+import com.example.player.Player;
+
+public class HotSeatGame extends Game{
+    public HotSeatGame() {
         super();
+        player2 = new Player("Player 2", 2);
+        totalRoundCount *= 2;
+        currentPlayer = player1;
     }
 
     @Override
@@ -11,20 +16,20 @@ public class PvPGame extends Game {
         gameMove.setScoreIndex(index);
         gameMove.setDices(getHand());
         gameMove.setScore(currentScores.get(index));
-        player1.addToScore(currentScores.get(index));
+        currentPlayer.addToScore(currentScores.get(index));
         //player.addToUpperSectionScore(score);
         if (index < UPPERSECTIONLIMIT) {
-            gameMove.setGotBonus(player1.addToBonusScore(currentScores.get(index)));
-            gameMove.setUpperScore(player1.getUpperSectionScore());
+            gameMove.setGotBonus(currentPlayer.addToBonusScore(currentScores.get(index)));
+            gameMove.setUpperScore(currentPlayer.getUpperSectionScore());
         }
         if (isYatzy()) { //Make it better
             if (index != YATZYCATEGORY) {
-                gameMove.setGotYatzy(player1.isAdditionalYatzy());
+                gameMove.setGotYatzy(currentPlayer.isAdditionalYatzy());
             } else {
-                player1.setIsYatzy();
+                currentPlayer.setIsYatzy();
             }
         }
-        gameMove.setTotalScore(player1.getTotalScore());
+        gameMove.setTotalScore(currentPlayer.getTotalScore());
         currentRoundCount++;
         return  gameMove;
     }
@@ -33,4 +38,5 @@ public class PvPGame extends Game {
     public GameMove getOpponentMove() {
         return this.player2.getPlayerMove();
     }
+
 }

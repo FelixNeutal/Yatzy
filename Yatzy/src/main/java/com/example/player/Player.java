@@ -12,9 +12,11 @@ public class Player implements IPlayer {
     private boolean isYatzy = false;
     private String name;
     private UUID uuid;
+    private int playerNum;
 
-    public Player(String name) {
+    public Player(String name, int num) {
         this.name = name;
+        this.playerNum = num;
     }
 
     public void addToScore(int score) {
@@ -65,5 +67,9 @@ public class Player implements IPlayer {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public int getPlayerNum() {
+        return playerNum;
     }
 }

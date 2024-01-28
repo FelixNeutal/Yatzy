@@ -1,19 +1,13 @@
 package com.example.controller;
 
-import com.example.game.BotGame;
-import com.example.game.Game;
-import com.example.game.PvPGame;
-import com.example.game.SoloGame;
+import com.example.game.*;
 import com.example.network.Session;
-import com.example.player.Player;
 import com.example.yatzy.Yatzy;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 
@@ -47,7 +41,6 @@ public class MainMenuController implements Controller{
         FXMLLoader loader = switchScene("GameScreen.fxml", new SoloGameController());
         SoloGameController controller = loader.getController();
         controller.setMainController(this);
-        Player p = new Player("Felix");
         currentGame = new SoloGame();
         controller.setGame(currentGame);
     }
@@ -56,14 +49,20 @@ public class MainMenuController implements Controller{
         networkMenu();
     }
     @FXML
-    protected void onHotSeatGameClick() {}
+    protected void onHotSeatGameClick() throws IOException {
+        if (mainStage == null) return;
+        FXMLLoader loader = switchScene("GameScreen.fxml", new HotSeatGameController());
+        HotSeatGameController controller = loader.getController();
+        controller.setMainController(this);
+        currentGame = new HotSeatGame();
+        controller.setGame(currentGame);
+    }
     @FXML
     protected void onVSBotGameClick() throws IOException {
         if (mainStage == null) return;
         FXMLLoader loader = switchScene("GameScreen.fxml", new BotGameController());
         BotGameController controller = loader.getController();
         controller.setMainController(this);
-        Player p = new Player("Felix");
         currentGame = new BotGame();
         controller.setGame(currentGame);
     }
@@ -75,13 +74,12 @@ public class MainMenuController implements Controller{
         controller.setSession(session);
         session.getNetworkHandler().setGameController(controller);
         controller.setMainController(this);
-        Player p = new Player("Felix");
         currentGame = new PvPGame();
         controller.setGame(currentGame);
         if (playerStarts) {
-            controller.setPlayersTurn();
+            controller.setPlayer1Turn();
         } else {
-            controller.setOpponentssTurn();
+            controller.setPlayer2Turn();
         }
     }
 

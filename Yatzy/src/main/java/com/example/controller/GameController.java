@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.game.Game;
-import com.example.game.GameMove;
 import com.example.yatzy.PersistentButtonToggleGroup;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,14 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +44,8 @@ public abstract class GameController implements Controller {
     @FXML
     protected Label yatzyLabel;
 
-    protected String playerTurn;
-    protected String opponentTurn;
+    protected String player1Turn = "  Your turn   ";
+    protected String player2Turn = "Opponents turn";
 
     protected ToggleButton p1BonusButton;
     protected ToggleButton p2BonusButton;
@@ -71,14 +64,12 @@ public abstract class GameController implements Controller {
     public void initialize() {
         createScoreButtons();
         createDiceButtons();
-        p1NameLabel.setText("Player1");
-        p1NameLabelB.setText("Player1");
-        p2NameLabel.setText("Player2");
-        p2NameLabelB.setText("Player2");
-        playerTurn   = "  Your turn   ";
-        opponentTurn = "Opponents turn";
+        p1NameLabel.setText("Player 1");
+        p1NameLabelB.setText("Player 1");
+        p2NameLabel.setText("Player 2");
+        p2NameLabelB.setText("Player 2");
         playButton.setDisable(true);
-        currentTurnLabel.setText(playerTurn);
+        currentTurnLabel.setText(player1Turn);
     }
 
     @FXML
@@ -87,10 +78,11 @@ public abstract class GameController implements Controller {
         enableDiceButtons();
         //enableScoreButtons();
         printDice(game.getHand());
-        printScores(game.getScores());
+        printScores(game.getScores(), game.getCurrentPlayer().getPlayerNum());
         //unselectDice();
-        unselectScore();
+        unselectPlayer1ScoreButtons();
         rollButton.setDisable(game.isRollCountDone());
+
         if (game.isYatzy()) {
             yatzyLabel.setText("YATZY!!!");
             new Thread(() -> {
@@ -121,6 +113,9 @@ public abstract class GameController implements Controller {
     @FXML
     protected abstract void onPlayButtonClicked();
 
+    protected abstract void setPlayer1Turn();
+    protected abstract void setPlayer2Turn();
+
     @FXML
     protected void onScoreButtonToggled(ActionEvent actionEvent) {
         playButton.setDisable(false);
@@ -131,9 +126,15 @@ public abstract class GameController implements Controller {
         playButton.setDisable(false);
     }
 
-    protected ToggleButton getScoreButton() {
+    protected int getScoreButtonIndex() {
+        List<ToggleButton> scoreButtons;
+        if (game.getCurrentPlayer().getPlayerNum() == 1) {
+            scoreButtons = p1ScoreButtons;
+        } else {
+            scoreButtons = p2ScoreButtons;
+        }
         ToggleButton button = null;
-        for (ToggleButton b: p1ScoreButtons) {
+        for (ToggleButton b: scoreButtons) {
             if (b.isSelected()) {
                 button = b;
             }
@@ -141,7 +142,7 @@ public abstract class GameController implements Controller {
         button.setSelected(false);
         button.setDisable(true);
         //p1ScoreButtons.remove(button);
-        return button;
+        return scoreButtons.indexOf(button);
     }
 
     protected boolean isUpperSection() {
@@ -159,8 +160,14 @@ public abstract class GameController implements Controller {
         }
     }
 
-    protected void clearScoreButtons() {
+    protected void clearPlayer1ScoreButtons() {
         for (ToggleButton b : p1ScoreButtons) {
+            b.setText(" ");
+        }
+    }
+
+    protected void clearPlayer2ScoreButtons() {
+        for (ToggleButton b : p2ScoreButtons) {
             b.setText(" ");
         }
     }
@@ -173,14 +180,27 @@ public abstract class GameController implements Controller {
         playButton.setDisable(true);
     }
 
-    protected void enableScoreButtons() {
+    protected void enablePlayer1ScoreButtons() {
         for (ToggleButton b : p1ScoreButtons) {
             b.setDisable(false);
         }
     }
 
-    protected void disableScoreButtons() {
+    protected void enablePlayer2ScoreButtons() {
+        for (ToggleButton b : p2ScoreButtons) {
+            b.setDisable(false);
+        }
+    }
+
+    protected void disablePlayer1ScoreButtons() {
         for (ToggleButton b : p1ScoreButtons) {
+            b.setDisable(true);
+            b.setSelected(false);
+        }
+    }
+
+    protected void disablePlayer2ScoreButtons() {
+        for (ToggleButton b : p2ScoreButtons) {
             b.setDisable(true);
             b.setSelected(false);
         }
@@ -207,8 +227,14 @@ public abstract class GameController implements Controller {
         rollButton.setDisable(false);
     }
 
-    protected void unselectScore() {
+    protected void unselectPlayer1ScoreButtons() {
         for (ToggleButton b : p1ScoreButtons) {
+            b.setSelected(false);
+        }
+    }
+
+    protected void unselectPlayer2ScoreButtons() {
+        for (ToggleButton b : p2ScoreButtons) {
             b.setSelected(false);
         }
     }
@@ -238,12 +264,11 @@ public abstract class GameController implements Controller {
     protected void createScoreButtons() {
         ToggleButton b, c;
         for (int i = 0; i < 6; i++) {
-            b = new ToggleButton("St");
+            b = new ToggleButton("  ");
             b.setPrefSize(32.0, 32.0);
             //b.getStyleClass().setAll("border-color: #04AA6D;");
             b.setToggleGroup(p1Group);
             b.setDisable(true);
-            b.setId("upperSection");
             b.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
@@ -269,7 +294,6 @@ public abstract class GameController implements Controller {
             b.setPrefSize(32.0, 32.0);
             b.setToggleGroup(p1Group);
             b.setDisable(true);
-            b.setId("null");
             b.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
@@ -285,7 +309,6 @@ public abstract class GameController implements Controller {
             c = new ToggleButton("  ");
             c.setPrefSize(32.0, 32.0);
             c.setDisable(true);
-            c.setId("null");
             mainGrid.add(c, 2, i);
             p2ScoreButtons.add(c);
         }
@@ -294,15 +317,8 @@ public abstract class GameController implements Controller {
             c = new ToggleButton("  ");
             c.setPrefSize(32.0, 32.0);
             c.setDisable(true);
-            c.setId("null");
             mainGrid.add(c, 6, i);
             p2ScoreButtons.add(c);
-        }
-    }
-
-    protected void hideSecondPlayerScores() {
-        for (ToggleButton b: p2ScoreButtons) {
-            b.setVisible(true);
         }
     }
 
@@ -316,16 +332,6 @@ public abstract class GameController implements Controller {
         return selected;
     }
 
-    protected Integer getSelectedScore() {
-        Integer score = 0;
-        for (ToggleButton b : p1ScoreButtons) {
-            if (b.isSelected()) {
-                score = Integer.parseInt(b.getText());
-            }
-        }
-        return score;
-    }
-
     protected void unselectDice() {
         for (ToggleButton b : diceButtons) {
             b.setSelected(false);
@@ -333,10 +339,16 @@ public abstract class GameController implements Controller {
         }
     }
 
-    protected void printScores(List<Integer> scores) {
-        for (int i = 0; i < p1ScoreButtons.size(); i++) {
-                p1ScoreButtons.get(i).setText(scores.get(i).toString());
-                p1ScoreButtons.get(i).setDisable(false);
+    protected void printScores(List<Integer> scores, int playerNum) {
+        List<ToggleButton> scoreButtons;
+        if (playerNum == 1) {
+            scoreButtons = p1ScoreButtons;
+        } else {
+            scoreButtons = p2ScoreButtons;
+        }
+        for (int i = 0; i < scoreButtons.size(); i++) {
+                scoreButtons.get(i).setText(scores.get(i).toString());
+                scoreButtons.get(i).setDisable(false);
         }
     }
 

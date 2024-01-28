@@ -18,21 +18,22 @@ public abstract class Game {
     protected int diceRollCountLimit = 3;
     protected int currentRollCount = 0;
     protected Hand hand;
-    protected Player player;
-    protected Player opponent;
+    protected Player player1;
+    protected Player player2;
+    protected Player currentPlayer;
     protected List<Integer> currentScores;
     protected String gameType = "";
     protected int opponentTotalScore;
 
     public Game() {
-        player = new Player("Player 1");
+        player1 = new Player("Player 1", 1);
         hand = new Hand();
         currentScores = new ArrayList<>();
     }
 
     //common method
     public int getPlayerScore() {
-        return player.getTotalScore();
+        return player1.getTotalScore();
     }
 
 //    public int getPlayerUpperScore() {
@@ -49,7 +50,7 @@ public abstract class Game {
 
     //common method
     public int getOpponentScore() {
-        return opponent.getTotalScore();
+        return player2.getTotalScore();
     }
 
     //common method
@@ -97,10 +98,10 @@ public abstract class Game {
 
     public String getWinnerText() {
         String winText = "";
-        if (opponent != null) {
-            if (player.getTotalScore() > opponent.getTotalScore()) {
+        if (player2 != null) {
+            if (player1.getTotalScore() > player2.getTotalScore()) {
                 winText = "You Won!";
-            } else if (player.getTotalScore() < opponent.getTotalScore()) {
+            } else if (player1.getTotalScore() < player2.getTotalScore()) {
                 winText = "You lost!";
             } else {
                 winText = "It's a tie!";
@@ -111,11 +112,15 @@ public abstract class Game {
 
     //common method
     public void switchCurrentPlayer() {
-//        if (currentPlayer.equals(player)) {
-//            currentPlayer = player2;
-//        } else {
-//            currentPlayer = player;
-//        }
+        if (currentPlayer.equals(player1)) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public abstract GameMove getOpponentMove();
@@ -129,11 +134,11 @@ public abstract class Game {
     }
 
     public String getPlayerName() {
-        return player.getName();
+        return player1.getName();
     }
 
     public String getOpponentName() {
-        return opponent.getName();
+        return player2.getName();
     }
 
     public int getOpponentTotalScore() {

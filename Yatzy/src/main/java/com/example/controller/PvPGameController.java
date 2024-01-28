@@ -15,8 +15,8 @@ public class PvPGameController extends GameController {
     @Override
     protected void onPlayButtonClicked() {
         playerTurns++;
-        ToggleButton button = getScoreButton();
-        GameMove gameMove = game.onPlay(p1ScoreButtons.indexOf(button));
+        int buttonIndex = getScoreButtonIndex();
+        GameMove gameMove = game.onPlay(buttonIndex);
         p1ScoreLabel.setText(String.valueOf(gameMove.getTotalScore()));
         System.out.println("Totalscore is " + gameMove.getTotalScore());
         p1BonusButton.setText(String.valueOf(gameMove.getUpperScore()));
@@ -24,28 +24,28 @@ public class PvPGameController extends GameController {
             p1BonusButton.setStyle("-fx-background-color: orange;");
         }
         if (gameMove.isGotYatzy()) {
-            p1ScoreButtons.get(p1ScoreButtons.indexOf(button)).setStyle("-fx-background-color: orange;");
+            p1ScoreButtons.get(buttonIndex).setStyle("-fx-background-color: orange;");
         }
-        p1ScoreButtons.set(p1ScoreButtons.indexOf(button), new ToggleButton());
+        p1ScoreButtons.set(buttonIndex, new ToggleButton());
         session.send(new Packet(Header.OPPONENT_MOVE, gameMove));
         shouldEndGame();
-        setOpponentssTurn();
+        setPlayer2Turn();
     }
 
-    protected void setPlayersTurn() {
-        currentTurnLabel.setText(playerTurn);
+    protected void setPlayer1Turn() {
+        currentTurnLabel.setText(player1Turn);
         enableRollButton();
         clearDiceButtons();
         game.resetCurrentRollCount();
     }
 
-    protected void setOpponentssTurn() {
-        currentTurnLabel.setText(opponentTurn);
-        disableScoreButtons();
+    protected void setPlayer2Turn() {
+        currentTurnLabel.setText(player2Turn);
+        disablePlayer1ScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
-        clearScoreButtons();
+        clearPlayer1ScoreButtons();
         disableRollButton();
         unselectDice();
     }
@@ -67,7 +67,7 @@ public class PvPGameController extends GameController {
                 Thread.sleep(700);
                 Platform.runLater(() -> {
                     if (!game.isRoundCountDone()) {
-                        setPlayersTurn();
+                        setPlayer1Turn();
                     } else {
                         //Show total winner
                         try {
@@ -97,47 +97,4 @@ public class PvPGameController extends GameController {
     public void setSession(Session session) {
         this.session = session;
     }
-//    public BotGameController() {
-//        System.out.println("Bot controller created");
-//    }
-//
-//    @FXML
-//    protected void onPlayButtonClicked() {
-//        ToggleButton button = getScoreButton();
-//        int score = Integer.parseInt(button.getText());
-//        if (button.getId().equals("upperSection")) {
-//            game.addUpperSectionScore(score);
-//        }
-//        game.onPlay(score);
-//        button.setId("checked");
-//        p1ScoreLabel.setText(String.valueOf(game.getPlayer1Score()));
-//        disableScoreButtons();
-//        disableDiceButtons();
-//        disablePlayButton();
-//        clearDiceButtons();
-//
-//        new Thread(() -> {
-//            //Ai ai = new Ai();
-//            //int value = ai.makeAMove();
-//            Platform.runLater(() -> {
-//                //welcomeText.setText("Value got was " + value);
-//            });
-//        }).start();
-//
-//        if (!game.isGameDone()) {
-//            rollButton.setDisable(false);
-//            game.resetCurrentRollCount();
-//        } else {
-//            //Show total winner
-//            try {
-//                mainController.endCurrentGame();
-//            } catch (IOException e) {}
-//        }
-//    }
-//
-//    @Override
-//    public void setGame(Game game) {
-//        System.out.println("Setting game");
-//        super.setGame(game);
-//    }
 }

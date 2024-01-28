@@ -14,7 +14,7 @@ public class RobotPlayer extends Player {
     private int randomIndex = 12;
 
     public RobotPlayer() {
-        super("robot");
+        super("robot", 2);
         moves.add(new GameMove("12215", 2, 0));
         moves.add(new GameMove("32212", 6, 1));
         moves.add(new GameMove("32133", 9, 2));
