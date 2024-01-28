@@ -52,7 +52,7 @@ public class PvPGameController extends GameController {
 
     public void OpponentMove(GameMove move) {
         opponentTurns++;
-        game.setOpponentTotalScore(move.getTotalScore());
+        game.setPlayer2TotalScore(move.getTotalScore());
         new Thread(() -> {
             try {
                 Platform.runLater(() -> {
@@ -87,11 +87,6 @@ public class PvPGameController extends GameController {
                 mainController.endCurrentGame();
             } catch (IOException e) {}
         }
-    }
-
-    @Override
-    public void setMainController(MainMenuController controller) {
-        mainController = controller;
     }
 
     public void setSession(Session session) {

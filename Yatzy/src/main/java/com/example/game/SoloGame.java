@@ -5,13 +5,11 @@ public class SoloGame extends Game {
 
     public SoloGame() {
         super();
-        setGameType("soloGame");
     }
 
     public GameMove onPlay(int index) {
         GameMove gameMove = new GameMove();
         player1.addToScore(currentScores.get(index));
-        //player.addToUpperSectionScore(score);
         if (index < UPPERSECTIONLIMIT) {
             gameMove.setGotBonus(player1.addToBonusScore(currentScores.get(index)));
         }

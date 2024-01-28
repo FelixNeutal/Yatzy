@@ -1,6 +1,7 @@
 package com.example.game;
 
 public class PvPGame extends Game {
+    private int player2TotalScore;
     public PvPGame() {
         super();
     }
@@ -32,5 +33,10 @@ public class PvPGame extends Game {
     @Override
     public GameMove getOpponentMove() {
         return this.player2.getPlayerMove();
+    }
+
+    @Override
+    public int getPlayer2TotalScore() {
+        return player2TotalScore;
     }
 }

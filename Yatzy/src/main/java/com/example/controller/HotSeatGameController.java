@@ -20,7 +20,6 @@ public class HotSeatGameController extends GameController {
             setPlayer2ScoreInfo(gameMove, buttonIndex);
         }
         if (!game.isRoundCountDone()) {
-            //setOpponentssTurn();
             game.switchCurrentPlayer();
             if (game.getCurrentPlayer().getPlayerNum() == 1) {
                 setPlayer1Turn();
@@ -28,7 +27,6 @@ public class HotSeatGameController extends GameController {
                 setPlayer2Turn();
             }
         } else {
-            //Show total winner
             try {
                 mainController.endCurrentGame();
             } catch (IOException e) {}
@@ -41,7 +39,6 @@ public class HotSeatGameController extends GameController {
         clearDiceButtons();
         game.resetCurrentRollCount();
         disablePlayer2ScoreButtons();
-        enablePlayer1ScoreButtons();
         clearPlayer2ScoreButtons();
         unselectPlayer2ScoreButtons();
     }
@@ -52,7 +49,6 @@ public class HotSeatGameController extends GameController {
         clearDiceButtons();
         game.resetCurrentRollCount();
         disablePlayer1ScoreButtons();
-        enablePlayer2ScoreButtons();
         clearPlayer1ScoreButtons();
         unselectPlayer1ScoreButtons();
     }
@@ -81,8 +77,4 @@ public class HotSeatGameController extends GameController {
         p2ScoreButtons.set(buttonIndex, new ToggleButton());
     }
 
-    @Override
-    public void setMainController(MainMenuController controller) {
-        mainController = controller;
-    }
 }

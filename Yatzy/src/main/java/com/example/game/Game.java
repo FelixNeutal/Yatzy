@@ -1,5 +1,3 @@
-//Maybe put mainmenucontroller here
-
 package com.example.game;
 
 import com.example.gameLogic.Hand;
@@ -22,8 +20,7 @@ public abstract class Game {
     protected Player player2;
     protected Player currentPlayer;
     protected List<Integer> currentScores;
-    protected String gameType = "";
-    protected int opponentTotalScore;
+    protected int player2TotalScore;
 
     public Game() {
         player1 = new Player("Player 1", 1);
@@ -36,21 +33,8 @@ public abstract class Game {
         return player1.getTotalScore();
     }
 
-//    public int getPlayerUpperScore() {
-//        return player.getUpperSectionScore();
-//    }
-//
-//    public boolean isBonusSet() {
-//        return player.getIsBonusSet();
-//    }
-
     public boolean isYatzy() {
         return hand.getYatzy() == 50;
-    }
-
-    //common method
-    public int getOpponentScore() {
-        return player2.getTotalScore();
     }
 
     //common method
@@ -91,11 +75,6 @@ public abstract class Game {
     public void saveResults() {
     }
 
-    //common method
-    public boolean isWon() {
-        return true;
-    }
-
     public String getWinnerText() {
         String winText = "";
         if (player2 != null) {
@@ -125,27 +104,19 @@ public abstract class Game {
 
     public abstract GameMove getOpponentMove();
 
-    public String getGameType() {
-        return gameType;
-    }
-
-    public void setGameType(String type) {
-        gameType = type;
-    }
-
     public String getPlayerName() {
         return player1.getName();
     }
 
-    public String getOpponentName() {
-        return player2.getName();
+    public int getPlayer1TotalScore() {
+        return player1.getTotalScore();
     }
 
-    public int getOpponentTotalScore() {
-        return opponentTotalScore;
+    public int getPlayer2TotalScore() {
+        return player2.getTotalScore();
     }
 
-    public void setOpponentTotalScore(int opponentTotalScore) {
-        this.opponentTotalScore = opponentTotalScore;
+    public void setPlayer2TotalScore(int opponentTotalScore) {
+        this.player2TotalScore = opponentTotalScore;
     }
 }

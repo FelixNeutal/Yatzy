@@ -53,12 +53,9 @@ public abstract class GameController implements Controller {
     protected List<ToggleButton> p2ScoreButtons = new ArrayList<>();
     protected List<ToggleButton> diceButtons = new ArrayList<>();
     protected PersistentButtonToggleGroup p1Group = new PersistentButtonToggleGroup();
+    protected PersistentButtonToggleGroup p2Group = new PersistentButtonToggleGroup();
     public Game game;
     protected MainMenuController mainController;
-    @FXML
-    protected Button testButton;
-    @FXML
-    protected ToggleButton testToggleButton;
 
     @FXML
     public void initialize() {
@@ -76,10 +73,8 @@ public abstract class GameController implements Controller {
     protected void onRollButtonClicked() {
         game.onRoll(getUnSelectedDice());
         enableDiceButtons();
-        //enableScoreButtons();
         printDice(game.getHand());
         printScores(game.getScores(), game.getCurrentPlayer().getPlayerNum());
-        //unselectDice();
         unselectPlayer1ScoreButtons();
         rollButton.setDisable(game.isRollCountDone());
 
@@ -121,11 +116,6 @@ public abstract class GameController implements Controller {
         playButton.setDisable(false);
     }
 
-    @FXML
-    protected void onDiceButtonToggled() {
-        playButton.setDisable(false);
-    }
-
     protected int getScoreButtonIndex() {
         List<ToggleButton> scoreButtons;
         if (game.getCurrentPlayer().getPlayerNum() == 1) {
@@ -141,17 +131,7 @@ public abstract class GameController implements Controller {
         }
         button.setSelected(false);
         button.setDisable(true);
-        //p1ScoreButtons.remove(button);
         return scoreButtons.indexOf(button);
-    }
-
-    protected boolean isUpperSection() {
-        for (ToggleButton b: p1ScoreButtons) {
-            if (b.isSelected() && b.getId().equals("upperSection")) {
-                return true;
-            }
-        }
-        return false;
     }
 
     protected void clearDiceButtons() {
@@ -170,10 +150,6 @@ public abstract class GameController implements Controller {
         for (ToggleButton b : p2ScoreButtons) {
             b.setText(" ");
         }
-    }
-
-    protected void enablePlayButton() {
-        playButton.setDisable(false);
     }
 
     protected void disablePlayButton() {
@@ -269,15 +245,10 @@ public abstract class GameController implements Controller {
             //b.getStyleClass().setAll("border-color: #04AA6D;");
             b.setToggleGroup(p1Group);
             b.setDisable(true);
-            b.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    onScoreButtonToggled(actionEvent);
-                }
-            });
+            b.setOnAction(actionEvent -> onScoreButtonToggled(actionEvent));
             mainGrid.add(b, 1, i);
             p1ScoreButtons.add(b);
-            b.setToggleGroup(p1Group);
+            //b.setToggleGroup(p1Group);
         }
         p1BonusButton = new ToggleButton("  ");
         p1BonusButton.setPrefSize(32.0, 32.0);
@@ -294,21 +265,18 @@ public abstract class GameController implements Controller {
             b.setPrefSize(32.0, 32.0);
             b.setToggleGroup(p1Group);
             b.setDisable(true);
-            b.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    onScoreButtonToggled(actionEvent);
-                }
-            });
+            b.setOnAction(actionEvent -> onScoreButtonToggled(actionEvent));
             mainGrid.add(b, 5, i);
             p1ScoreButtons.add(b);
-            b.setToggleGroup(p1Group);
+            //b.setToggleGroup(p1Group);
         }
 
         for (int i = 0; i < 6; i++) {
             c = new ToggleButton("  ");
             c.setPrefSize(32.0, 32.0);
             c.setDisable(true);
+            c.setToggleGroup(p2Group);
+            c.setOnAction(actionEvent -> onScoreButtonToggled(actionEvent));
             mainGrid.add(c, 2, i);
             p2ScoreButtons.add(c);
         }
@@ -317,6 +285,8 @@ public abstract class GameController implements Controller {
             c = new ToggleButton("  ");
             c.setPrefSize(32.0, 32.0);
             c.setDisable(true);
+            c.setToggleGroup(p2Group);
+            c.setOnAction(actionEvent -> onScoreButtonToggled(actionEvent));
             mainGrid.add(c, 6, i);
             p2ScoreButtons.add(c);
         }
