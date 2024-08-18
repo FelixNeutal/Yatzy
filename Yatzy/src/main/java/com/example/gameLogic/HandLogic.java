@@ -171,4 +171,26 @@ public class HandLogic {
         }
         return patternFound;
     }
+
+    public static void generateDiceNumber(int index) {
+    }
+
+//    public static int getSmallStraightThrowableIndex(String hand) {
+//        char[] tempHand = hand.toCharArray();
+//        Arrays.sort(tempHand);
+//        char foundNumber = 0;
+//        for (int i = 0; i < tempHand.length; i++) {
+//            char oldValue = tempHand[i];
+//            tempHand[i] = '9';
+//            hand = new String(tempHand);
+//            if (getSmallStraight(hand) > 0) {
+//                foundNumber = oldValue;
+//                tempHand[i] = oldValue;
+//                break;
+//            }
+//            tempHand[i] = oldValue;
+//        }
+//        hand = new String(tempHand);
+//        return displayHand.indexOf(foundNumber);
+//    }
 }

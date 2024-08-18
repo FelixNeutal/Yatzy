@@ -4,7 +4,7 @@ import com.example.game.GameMove;
 
 import java.util.UUID;
 
-public class Player implements IPlayer {
+public class Player {
     private int totalScore = 0;
     private int upperSectionScore = 0;
     private boolean isBonus = false;

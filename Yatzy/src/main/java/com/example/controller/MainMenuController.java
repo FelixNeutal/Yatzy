@@ -57,7 +57,7 @@ public class MainMenuController implements Controller{
         FXMLLoader loader = switchScene("GameScreen.fxml", new BotGameController());
         BotGameController controller = loader.getController();
         controller.setMainController(this);
-        currentGame = new BotGame();
+        currentGame = new BotGame22();
         controller.setGame(currentGame);
     }
 

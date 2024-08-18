@@ -1,7 +1,11 @@
+/**
+ * Abstract base class for managing the game's main functionality.
+ * Handles user interaction with the game interface, such as rolling dice,
+ * selecting scores, and switching turns between players.
+ */
 package com.example.controller;
 
 import com.example.game.Game;
-import com.example.game.GameMove;
 import com.example.yatzy.PersistentButtonToggleGroup;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -59,6 +63,10 @@ public abstract class GameController implements Controller {
     public Game game;
     protected MainMenuController mainController;
 
+    /**
+     * Initialize method is run first.
+     * Creates score and dice buttons and places them in a list.
+     */
     @FXML
     public void initialize() {
         createScoreButtons();
@@ -71,12 +79,16 @@ public abstract class GameController implements Controller {
         currentTurnLabel.setText(player1Turn);
     }
 
+    /**
+     * Handles the logic when roll button is clicked.
+     * Rolls dice, updates scorebuttons and dice gui elements.
+     */
     @FXML
     protected void onRollButtonClicked() {
         enableDiceButtons();
         printDice(game.onRoll(getUnSelectedDice()));
         printScores(game.getAllScores(), game.getCurrentPlayer().getPlayerNum());
-        unselectPlayer1ScoreButtons();
+        unselectCurrentPlayerScoreButtons();
         rollButton.setDisable(game.isRollCountDone());
 
         if (game.isYatzy()) {
@@ -106,17 +118,20 @@ public abstract class GameController implements Controller {
         }).run();
     }
 
+    /**
+     * Handles the logic when play button is pressed.
+     * Updates player scores and gui.
+     */
     @FXML
     protected void onPlayButtonClicked() {
         int buttonIndex = getScoreButtonIndex();
         game.onPlay(buttonIndex);
-        p1ScoreLabel.setText(String.valueOf(game.getCurrentPlayerScore()));
-        p1ScoreButtons.set(buttonIndex, new ToggleButton());
-        disablePlayer1ScoreButtons();
+        setCurrentPlayerScore(buttonIndex);
+        disableCurrentPlayerScoreButtons();
         disableDiceButtons();
         disablePlayButton();
         clearDiceButtons();
-        clearPlayer1ScoreButtons();
+        clearCurrentPlayerScoreButtons();
         disableRollButton();
         unselectDice();
         opponentMove();
@@ -128,6 +143,16 @@ public abstract class GameController implements Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    protected void setCurrentPlayerScore(int index) {
+        if (game.getCurrentPlayer().getPlayerNum() == 1) {
+            p1ScoreLabel.setText(String.valueOf(game.getCurrentPlayerScore()));
+            p1ScoreButtons.set(index, new ToggleButton());
+        } else {
+            p2ScoreLabel.setText(String.valueOf(game.getCurrentPlayerScore()));
+            p2ScoreButtons.set(index, new ToggleButton());
         }
     }
 
@@ -164,8 +189,14 @@ public abstract class GameController implements Controller {
         }
     }
 
-    protected void clearPlayer1ScoreButtons() {
-        for (ToggleButton b : p1ScoreButtons) {
+    protected void clearCurrentPlayerScoreButtons() {
+        List<ToggleButton> scoreButtons;
+        if (game.getCurrentPlayer().getPlayerNum() == 1) {
+            scoreButtons = p1ScoreButtons;
+        } else {
+            scoreButtons = p2ScoreButtons;
+        }
+        for (ToggleButton b : scoreButtons) {
             b.setText(" ");
         }
     }
@@ -180,27 +211,26 @@ public abstract class GameController implements Controller {
         playButton.setDisable(true);
     }
 
-    protected void enablePlayer1ScoreButtons() {
-        for (ToggleButton b : p1ScoreButtons) {
+    protected void enableCurrentPlayerScoreButtons() {
+        List<ToggleButton> scoreButtons;
+        if (game.getCurrentPlayer().getPlayerNum() == 1) {
+            scoreButtons = p1ScoreButtons;
+        } else {
+            scoreButtons = p2ScoreButtons;
+        }
+        for (ToggleButton b : scoreButtons) {
             b.setDisable(false);
         }
     }
 
-    protected void enablePlayer2ScoreButtons() {
-        for (ToggleButton b : p2ScoreButtons) {
-            b.setDisable(false);
+    protected void disableCurrentPlayerScoreButtons() {
+        List<ToggleButton> scoreButtons;
+        if (game.getCurrentPlayer().getPlayerNum() == 1) {
+            scoreButtons = p1ScoreButtons;
+        } else {
+            scoreButtons = p2ScoreButtons;
         }
-    }
-
-    protected void disablePlayer1ScoreButtons() {
-        for (ToggleButton b : p1ScoreButtons) {
-            b.setDisable(true);
-            b.setSelected(false);
-        }
-    }
-
-    protected void disablePlayer2ScoreButtons() {
-        for (ToggleButton b : p2ScoreButtons) {
+        for (ToggleButton b : scoreButtons) {
             b.setDisable(true);
             b.setSelected(false);
         }
@@ -227,14 +257,14 @@ public abstract class GameController implements Controller {
         rollButton.setDisable(false);
     }
 
-    protected void unselectPlayer1ScoreButtons() {
-        for (ToggleButton b : p1ScoreButtons) {
-            b.setSelected(false);
+    protected void unselectCurrentPlayerScoreButtons() {
+        List<ToggleButton> scoreButtons;
+        if (game.getCurrentPlayer().getPlayerNum() == 1) {
+            scoreButtons = p1ScoreButtons;
+        } else {
+            scoreButtons = p2ScoreButtons;
         }
-    }
-
-    protected void unselectPlayer2ScoreButtons() {
-        for (ToggleButton b : p2ScoreButtons) {
+        for (ToggleButton b : scoreButtons) {
             b.setSelected(false);
         }
     }
